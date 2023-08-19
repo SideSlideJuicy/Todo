@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
     });
 });
 
+// Add task
 app.post("/", (req, res) => {
     const todo = new Todo({
         todo: req.body.taskValue
@@ -40,6 +41,7 @@ app.post("/", (req, res) => {
     });
 });
 
+// Delete task
 app.delete("/:id", (req, res) => {
     Todo.findByIdAndDelete(req.params.id)
     .then(result => {
@@ -51,6 +53,7 @@ app.delete("/:id", (req, res) => {
     });
 });
 
+// Edit task
 app.put("/:id", (req, res) => {
     const taskId = req.params.id;
     const updatedTaskValue = req.body.updatedTaskValue;
@@ -68,6 +71,23 @@ app.put("/:id", (req, res) => {
         res.status(500).json({ message: 'An error occurred' });
     });
 });
+
+// Search
+app.get('/search', (req, res) => {
+    const searchQuery = req.query.q; // Get the search query from the request
+
+    // Use a regular expression to perform a case-insensitive search
+    Todo.find({ todo: { $regex: new RegExp(searchQuery, 'i') } })
+        .then(result => {
+            res.render('index', { data: result });
+        })
+        .catch(error => {
+            console.error("Error searching tasks:", error);
+            res.status(500).send("Internal Server Error");
+        });
+});
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
