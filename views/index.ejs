@@ -9,18 +9,31 @@
 </head>
 <body>
     <header>
+        <form class="search-form" autocomplete="off">
+            <input onkeyup="activateClearButton()" type="text" class="search-field clearable" placeholder="Search tasks" id="search-field">
+            <button class="search-btn" type="submit">
+                <svg class="search-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 20" width="21" height="20">
+                    <path fill="none" fill-rule="evenodd" stroke-width="2" stroke="#fff" d="M8 1c3.866 0 7 3.134 7 7s-3.134 7-7 7-7-3.134-7-7 3.134-7 7-7zm6.25 12.25l5.5 5.5"></path>
+                </svg>
+            </button>
+            <button class="clear-btn clear-btn-spacing" type="button" id="clear-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14">
+                    <path fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M1.6 1.6l12.8 12.8m-12.8 0L14.4 1.6"></path>
+                </svg>
+            </button>
+        </form>
+    </header>
+
+    <main>
         <h1>Task List 2023</h1>
         <form id="new-task-form" action="/" method="post" autocomplete="off">
             <input type="text" id="new-task-input" placeholder="Task name" name="taskValue" required/>
             <input type="submit" id="new-task-submit" value="Add task"/>
         </form>
-    </header>
 
-    <main>
         <section class="task-list">
-                <h2>Tasks</h2>
+            <h2>Tasks</h2>
                 <div id="tasks">
-
                     <% if(data) { %>
                         <% data.forEach(todoValue => { %>
                             <div class="task">
@@ -34,12 +47,29 @@
                             </div>
                         <% }) %>
                     <% } %>
-
-                    
-
                 </div>
         </section>
     </main>
+
+    <script>
+        var clearButton = 0;
+
+        function activateClearButton(){
+            if(clearButton == 0){
+                if(!document.getElementById('search-field').value.length){
+                    document.getElementById("search-field").classList = "search-field clearable";        
+                }
+                else{
+                    document.getElementById("search-field").classList = "search-field clearable filledin";
+                }           
+            }
+        }
+
+        document.getElementById('clear-btn').onclick = function() {
+            document.getElementById("search-field").value = "";
+            document.getElementById("search-field").classList = "search-field clearable";
+        };
+    </script>
 
     <script>
         const deleteButton = document.querySelectorAll(".delete")
@@ -58,42 +88,44 @@
         const editButtons = document.querySelectorAll(".edit");
 
         editButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            const taskContainer = button.closest(".task");
-            const taskInput = taskContainer.querySelector(".text");
-            const taskId = button.getAttribute("data-task-id"); // Get the task ID from data attribute
+            button.addEventListener("click", () => {
+                const taskContainer = button.closest(".task");
+                const taskInput = taskContainer.querySelector(".text");
+                const taskId = button.getAttribute("data-task-id"); // Get the task ID from data attribute
 
-            if (button.textContent === "Edit") {
-            // Change "Edit" button text to "Save"
-            button.textContent = "Save";
+                if (button.textContent === "Edit") {
+                    // Change "Edit" button text to "Save"
+                    button.textContent = "Save";
 
-            // Enable editing of the task input field
-            taskInput.removeAttribute("readonly");
-            } else if (button.textContent === "Save") {
-            // Change "Save" button text to "Edit"
-            button.textContent = "Edit";
-
-            // Disable editing of the task input field
-            taskInput.setAttribute("readonly", true);
-
-            // Send a PUT request to update the task
-            fetch(`/${taskId}`, {
-                method: "PUT",
-                headers: {
-                "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ updatedTaskValue: taskInput.value }) // Include the updated text
-            })
-            .then(response => {
-                if (!response.ok) {
-                console.error("Error updating task");
+                    // Enable editing of the task input field
+                    taskInput.removeAttribute("readonly");
                 }
-            })
-            .catch(error => {
-                console.error("Network error:", error);
+                
+                else if (button.textContent === "Save") {
+                    // Change "Save" button text to "Edit"
+                    button.textContent = "Edit";
+
+                    // Disable editing of the task input field
+                    taskInput.setAttribute("readonly", true);
+
+                    // Send a PUT request to update the task
+                    fetch(`/${taskId}`, {
+                        method: "PUT",
+                        headers: {
+                        "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ updatedTaskValue: taskInput.value }) // Include the updated text
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                        console.error("Error updating task");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Network error:", error);
+                    });
+                }
             });
-            }
-        });
         });
     </script>
 

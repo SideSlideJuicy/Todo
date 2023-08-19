@@ -23,14 +23,13 @@ body{
 }
 
 header{
-    padding: 2rem 1rem;
-    max-width: 800px; 
+    padding: 1rem 1rem;
     width: 100%;
     margin: 0 auto;
-    /* background: blue; */
+    background: #263142;
 }
 
-header h1{
+main h1{
     font-size: 2.5rem;
     font-weight: 300;
     color: var(--grey);
@@ -91,7 +90,6 @@ main{
 
 .task-list{
     padding: 1rem;
-    /* background: green; */
 }
 
 .task-list h2{
@@ -156,4 +154,88 @@ main{
 
 .task .actions .delete{
     color: crimson;
+}
+
+/* Search bar */
+.search-form{
+    display: flex;
+    position: relative;
+    width: 50%;
+    left: 25%;
+}
+
+.search-field {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0;
+    border-left: 1px solid #ddd;
+    border-right: 0;
+    border-top: 1px solid #ccc;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0;
+    box-shadow: none;
+    flex: 1 1 auto;
+    font-size: 1rem;
+    padding: 0 1rem;
+    transition-delay: 0s;
+    transition-duration: .2s;
+    transition-property: border-top-color,border-bottom-color,border-left-color,background-color;
+    transition-timing-function: ease-out;
+    width: 0;
+}
+
+/* Search bar clear button */
+.clear-btn {
+    background: none;
+    border: none;
+    bottom: 0;
+    height: 2.75rem;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    right: 0.5625rem;
+    top: 0;
+    transition: opacity .1s ease-out;
+    visibility: hidden;
+    width: 2.25rem;
+    cursor: pointer;
+}
+
+.clear-btn-spacing {
+    right: 2.75rem;
+}
+
+.filledin~.clear-btn {
+    opacity: .6;
+    visibility: visible;
+}
+
+.search-field.clearable {
+    padding-right: 1.875rem;
+}
+
+/* Search bar search button */
+.search-btn {
+    cursor: pointer;
+    align-items: center;
+    background: var(--grey);
+    border: 0;
+    border-bottom-right-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    display: flex;
+    flex: 0 0 auto;
+    height: 2.75rem;
+    justify-content: center;
+    padding: 0;
+    transition: background-color .15s ease-out;
+    width: 2.75rem;
+}
+
+.search-btn-icon {
+    height: 1.25rem;
+    transition: all .1s ease-out;
+    width: 1.3125rem;
 }
