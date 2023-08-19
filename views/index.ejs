@@ -52,18 +52,12 @@
     </main>
 
     <script>
-        var clearButton = 0;
+        const searchField = document.getElementById("search-field");
 
-        function activateClearButton(){
-            if(clearButton == 0){
-                if(!document.getElementById('search-field').value.length){
-                    document.getElementById("search-field").classList = "search-field clearable";        
-                }
-                else{
-                    document.getElementById("search-field").classList = "search-field clearable filledin";
-                }           
-            }
-        }
+        searchField.addEventListener("input", () => {
+            const hasContent = searchField.value.length > 0;
+            searchField.classList.toggle("filledin", hasContent);
+        });
 
         document.getElementById('clear-btn').onclick = function() {
             document.getElementById("search-field").value = "";
