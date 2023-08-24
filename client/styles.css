@@ -156,6 +156,12 @@ main{
     color: crimson;
 }
 
+.task .actions .status{
+    background-image: linear-gradient(to right, rgb(83, 234, 83), rgb(11, 158, 116));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 /* Search bar */
 .search-form{
     display: flex;
