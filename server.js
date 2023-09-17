@@ -83,29 +83,24 @@ app.put("/:id", (req, res) => {
 });
 
 // Search
-app.get('/search', (req, res) => {
-    const searchQuery = req.query.q; // Get the search query from the request
+app.get('/search', async (req, res) => {
+    const searchQuery = req.query.q.trim(); // Get the search query from the request and trim spaces
 
-    // Use a regular expression to perform a case-insensitive search
-    Todo.find({
-        todo: { $regex: new RegExp(searchQuery, 'i') },
-        status: 'Undone' // Filter by status "Undone" (undone)
-    })
-        .then(upcomingTasks => {
-            // Retrieve tasks with status "Done"
-            Todo.find({ status: "Done" })
-                .then(doneTasks => {
-                    res.json({ upcomingTasks, doneTasks });
-                })
-                .catch(error => {
-                    console.error("Error retrieving Done tasks:", error);
-                    res.status(500).json({ message: 'Internal Server Error' });
-                });
-        })
-        .catch(error => {
-            console.error("Error retrieving upcoming tasks:", error);
-            res.status(500).json({ message: 'Internal Server Error' });
+    try {
+        // Search for tasks that contain the search query
+        const tasks = await Todo.find({
+            todo: { $regex: new RegExp(searchQuery, 'i') }
         });
+
+        // Separate tasks by status
+        const upcomingTasks = tasks.filter(task => task.status === 'Undone');
+        const doneTasks = tasks.filter(task => task.status === 'Done');
+
+        res.render('index', { upcomingTasks, doneTasks });
+    } catch (error) {
+        console.error("Error retrieving tasks:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 // 
