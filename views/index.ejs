@@ -32,17 +32,37 @@
         </form>
 
         <section class="task-list">
-            <h2>Tasks</h2>
-                <div id="tasks">
-                    <% if(data) { %>
-                        <% data.forEach(todoValue => { %>
+            <h2 id="upcoming-header">Upcoming</h2>
+                <div id="upcoming-tasks">
+                    <% if(upcomingTasks) { %>
+                        <% upcomingTasks.forEach(todoValue => { %>
                             <div class="task">
                                 <div class="content">
                                     <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
                                 </div>
                                 <div class="actions">
                                     <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
-                                    <button class="status">Done</button>
+                                    <button class="status" data-task-id="<%= todoValue.id %>">Done</button>
+                                    <button class="delete <%= todoValue.id %>">Delete</button>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } %>
+                </div>
+        </section>
+
+        <section class="task-list">
+            <h2 id="done-header">Done</h2>
+                <div id="done-tasks">
+                    <% if(doneTasks) { %>
+                        <% doneTasks.forEach(todoValue => { %>
+                            <div class="task">
+                                <div class="content">
+                                    <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
+                                </div>
+                                <div class="actions">
+                                    <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
+                                    <button class="status" data-task-id="<%= todoValue.id %>">Undone</button>
                                     <button class="delete <%= todoValue.id %>">Delete</button>
                                 </div>
                             </div>
@@ -51,86 +71,6 @@
                 </div>
         </section>
     </main>
-
-    <script>
-        const searchField = document.getElementById("search-field");
-
-        searchField.addEventListener("input", () => {
-            const hasContent = searchField.value.length > 0;
-            searchField.classList.toggle("filledin", hasContent);
-        });
-
-        document.getElementById('clear-btn').onclick = function() {
-            searchField.value = "";
-            searchField.classList = "search-field clearable";
-        };
-
-        const searchForm = document.getElementById("search-form");
-
-        searchForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-
-            const searchQuery = searchField.value;
-            window.location.href = `/search?q=${searchQuery}`;
-        });
-    </script>
-
-    <script>
-        const deleteButton = document.querySelectorAll(".delete")
-
-        deleteButton.forEach((button, i) => {
-            button.addEventListener("click", () => {
-                const taskId = `/${button.classList[1]}`
-
-                fetch(taskId, {
-                    method: "DELETE"
-                })
-                window.location.href = "/"
-            })
-        })
-
-        const editButton = document.querySelectorAll(".edit");
-
-        editButton.forEach(button => {
-            button.addEventListener("click", () => {
-                const taskContainer = button.closest(".task");
-                const taskInput = taskContainer.querySelector(".text");
-                const taskId = button.getAttribute("data-task-id"); // Get the task ID from data attribute
-
-                if (button.textContent === "Edit") {
-                    // Change "Edit" button text to "Save"
-                    button.textContent = "Save";
-
-                    // Enable editing of the task input field
-                    taskInput.removeAttribute("readonly");
-                }
-                
-                else if (button.textContent === "Save") {
-                    // Change "Save" button text to "Edit"
-                    button.textContent = "Edit";
-
-                    // Disable editing of the task input field
-                    taskInput.setAttribute("readonly", true);
-
-                    // Send a PUT request to update the task
-                    fetch(`/${taskId}`, {
-                        method: "PUT",
-                        headers: {
-                        "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ updatedTaskValue: taskInput.value }) // Include the updated text
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                        console.error("Error updating task");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Network error:", error);
-                    });
-                }
-            });
-        });
-    </script>
+    <script src="/main.js"></script>
 </body>
 </html>

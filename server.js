@@ -14,15 +14,25 @@ app.use(bodyParser.json());
 const dburl = "mongodb://localhost:27017/tododb";
 mongoose.connect(dburl, { useNewUrlParser: true, useUnifiedTopology: true });
 
+// 
 app.get('/', (req, res) => {
-    Todo.find()
-    .then(result => {
-        res.render('index', { data: result });
-    })
-    .catch(error => {
-        console.error("Error retrieving tasks:", error);
-        res.status(500).send("Internal Server Error");
-    });
+    // Retrieve tasks with status "Undone"
+    Todo.find({ status: "Undone" })
+        .then(upcomingTasks => {
+            // Retrieve tasks with status "Done"
+            Todo.find({ status: "Done" })
+                .then(doneTasks => {
+                    res.render('index', { upcomingTasks, doneTasks });
+                })
+                .catch(error => {
+                    console.error("Error retrieving Done tasks:", error);
+                    res.status(500).send("Internal Server Error");
+                });
+        })
+        .catch(error => {
+            console.error("Error retrieving Upcoming tasks:", error);
+            res.status(500).send("Internal Server Error");
+        });
 });
 
 // Add task
@@ -87,8 +97,27 @@ app.get('/search', (req, res) => {
         });
 });
 
+// 
+app.put('/:id/status', (req, res) => {
+    const taskId = req.params.id;
+    const newStatus = req.body.status;
 
+    // Update the task status in the database
+    Todo.findByIdAndUpdate(taskId, { status: newStatus }, { new: true })
+        .then(updatedTask => {
+            if (updatedTask) {
+                res.json({ message: 'Status updated successfully' });
+            } else {
+                res.status(404).json({ message: 'Task not found' });
+            }
+        })
+        .catch(error => {
+            console.error("Error updating task status:", error);
+            res.status(500).json({ message: 'An error occurred' });
+        });
+});
 
+// Server port
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

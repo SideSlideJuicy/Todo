@@ -97,9 +97,10 @@ main{
     font-weight: 300;
     color: var(--grey);
     margin-bottom: 1rem;
+    margin-top: 50px;
 }
 
-#tasks .task{
+#upcoming-tasks .task{
     display: flex;
     justify-content: space-between;
     background-color: var(--darkest);
@@ -108,11 +109,11 @@ main{
     margin-bottom: 1rem; 
 }
 
-#tasks .task .content{
+#upcoming-tasks .task .content{
     flex: 1 1 0%;
 }
 
-#tasks .task .content .text{
+#upcoming-tasks .task .content .text{
     color: var(--light);
     font-size: 1.125rem;
     width: 100%;
@@ -120,11 +121,11 @@ main{
     transition: 0.4s;
 }
 
-#tasks .task .content .text:not(:read-only){
+#upcoming-tasks .task .content .text:not(:read-only){
     color: var(--pink);
 }
 
-#tasks .task .actions{
+#upcoming-tasks .task .actions{
     display: flex;
     margin: 0 -0.5rem;
 }
@@ -146,10 +147,15 @@ main{
     opacity: 0.6;
 }
 
-.task .actions .edit{
+#upcoming-tasks .task .actions .edit{
     background-image: linear-gradient(to right, var(--pink), var(--purple));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: block;
+}
+
+#done-tasks .task .actions .edit{
+    display: none;
 }
 
 .task .actions .delete{
@@ -157,9 +163,10 @@ main{
 }
 
 .task .actions .status{
-    background-image: linear-gradient(to right, rgb(83, 234, 83), rgb(11, 158, 116));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    /* background-image: linear-gradient(to right, #8B5CF6, rgb(220, 20, 163)); */
+    /* -webkit-background-clip: text; */
+    /* -webkit-text-fill-color: transparent; */
+    color: rgb(220, 20, 103);
 }
 
 /* Search bar */
@@ -244,4 +251,40 @@ main{
     height: 1.25rem;
     transition: all .1s ease-out;
     width: 1.3125rem;
+}
+
+
+
+
+
+
+/* Done tasks appearance */
+#done-tasks .task{
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--darker);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem; 
+}
+
+#done-tasks .task .content{
+    flex: 1 1 0%;
+}
+
+#done-tasks .task .content .text{
+    color: var(--grey);
+    font-size: 1.125rem;
+    width: 100%;
+    display: block;
+    transition: 0.4s;
+}
+
+#done-tasks .task .content .text:not(:read-only){
+    color: var(--pink);
+}
+
+#done-tasks .task .actions{
+    display: flex;
+    margin: 0 -0.5rem;
 }
