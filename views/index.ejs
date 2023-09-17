@@ -31,39 +31,43 @@
             <input type="submit" id="new-task-submit" value="Add task"/>
         </form>
 
-        <section class="task-list">
+        <section class="task-list" id="upcoming-list">
             <h2 id="upcoming-header">Upcoming</h2>
                 <div id="upcoming-tasks">
-                    <% upcomingTasks.forEach(todoValue => { %>
-                        <div class="task">
-                            <div class="content">
-                                <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
+                    <% if (upcomingTasks.length > 0) { %>
+                        <% upcomingTasks.forEach(todoValue => { %>
+                            <div class="task">
+                                <div class="content">
+                                    <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
+                                </div>
+                                <div class="actions">
+                                    <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
+                                    <button class="status" data-task-id="<%= todoValue.id %>">Done</button>
+                                    <button class="delete <%= todoValue.id %>">Delete</button>
+                                </div>
                             </div>
-                            <div class="actions">
-                                <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
-                                <button class="status" data-task-id="<%= todoValue.id %>">Done</button>
-                                <button class="delete <%= todoValue.id %>">Delete</button>
-                            </div>
-                        </div>
-                    <% }) %>
+                        <% }) %>
+                    <% } %>
                 </div>
         </section>
 
-        <section class="task-list">
+        <section class="task-list" id="done-list">
             <h2 id="done-header">Done</h2>
                 <div id="done-tasks">
-                    <% doneTasks.forEach(todoValue => { %>
-                        <div class="task">
-                            <div class="content">
-                                <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
+                    <% if (doneTasks.length > 0) { %>
+                        <% doneTasks.forEach(todoValue => { %>
+                            <div class="task">
+                                <div class="content">
+                                    <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
+                                </div>
+                                <div class="actions">
+                                    <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
+                                    <button class="status" data-task-id="<%= todoValue.id %>">Undone</button>
+                                    <button class="delete <%= todoValue.id %>">Delete</button>
+                                </div>
                             </div>
-                            <div class="actions">
-                                <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
-                                <button class="status" data-task-id="<%= todoValue.id %>">Undone</button>
-                                <button class="delete <%= todoValue.id %>">Delete</button>
-                            </div>
-                        </div>
-                    <% }) %>
+                        <% }) %>
+                    <% } %>
                 </div>
         </section>
     </main>

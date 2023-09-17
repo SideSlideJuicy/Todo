@@ -28,6 +28,43 @@ doneButtons.forEach(button => {
                     // Update the button text to "Undone"
                     button.textContent = "Undone";
 
+                    // Hide & show task list sections
+                    const upcomingSection = document.getElementById("upcoming-list");
+                    const doneSection = document.getElementById("done-list");
+
+                    // Check if the "Upcoming" section has tasks
+                    if (!hasTasks(upcomingSection)) {
+                        hideSection(upcomingSection);
+                    }
+                    else{
+                        showSection(upcomingSection);
+                    }
+
+                    // Check if the "Done" section has tasks
+                    if (!hasTasks(doneSection)) {
+                        hideSection(doneSection);
+                    }
+                    else{
+                        showSection(doneSection);
+                    }
+
+                    function hasTasks(section) {
+                        // Check if a section has tasks by counting the number of task elements
+                        const taskElements = section.querySelectorAll(".task");
+                        return taskElements.length > 0;
+                    }
+                    
+                    function hideSection(section) {
+                        // Add a class to hide the section
+                        section.classList.add("hidden");
+                    }
+
+                    function showSection(section) {
+                        // Remove a class to show the section
+                        section.classList.remove("hidden");
+                    }
+
+
                 } else {
                     console.error("Status update failed:", data.message);
                 }
@@ -56,6 +93,42 @@ doneButtons.forEach(button => {
 
                     // Update the button text to "Done"
                     button.textContent = "Done";
+
+                    // Hide & show task list sections
+                    const upcomingSection = document.getElementById("upcoming-list");
+                    const doneSection = document.getElementById("done-list");
+
+                    // Check if the "Upcoming" section has tasks
+                    if (!hasTasks(upcomingSection)) {
+                        hideSection(upcomingSection);
+                    }
+                    else{
+                        showSection(upcomingSection);
+                    }
+
+                    // Check if the "Done" section has tasks
+                    if (!hasTasks(doneSection)) {
+                        hideSection(doneSection);
+                    }
+                    else{
+                        showSection(doneSection);
+                    }
+
+                    function hasTasks(section) {
+                        // Check if a section has tasks by counting the number of task elements
+                        const taskElements = section.querySelectorAll(".task");
+                        return taskElements.length > 0;
+                    }
+                    
+                    function hideSection(section) {
+                        // Add a class to hide the section
+                        section.classList.add("hidden");
+                    }
+
+                    function showSection(section) {
+                        // Remove a class to show the section
+                        section.classList.remove("hidden");
+                    }
 
                 } else {
                     console.error("Status update failed:", data.message);
@@ -147,3 +220,41 @@ editButton.forEach(button => {
         }
     });
 });
+
+// Hide & show task list sections
+document.addEventListener("DOMContentLoaded", function () {
+    const upcomingSection = document.getElementById("upcoming-list");
+    const doneSection = document.getElementById("done-list");
+
+    // Check if the "Upcoming" section has tasks
+    if (!hasTasks(upcomingSection)) {
+        hideSection(upcomingSection);
+    }
+    else{
+        showSection(upcomingSection);
+    }
+
+    // Check if the "Done" section has tasks
+    if (!hasTasks(doneSection)) {
+        hideSection(doneSection);
+    }
+    else{
+        showSection(doneSection);
+    }
+});
+
+function hasTasks(section) {
+    // Check if a section has tasks by counting the number of task elements
+    const taskElements = section.querySelectorAll(".task");
+    return taskElements.length > 0;
+}
+
+function hideSection(section) {
+    // Add a class to hide the section
+    section.classList.add("hidden");
+}
+
+function showSection(section) {
+    // Remove a class to show the section
+    section.classList.remove("hidden");
+}
