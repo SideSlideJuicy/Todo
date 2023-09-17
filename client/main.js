@@ -10,7 +10,6 @@ doneButtons.forEach(button => {
 
         // When the button text content is "Done" and the button is pressed
         if (button.textContent === "Done"){
-            console.log("done")
             // Make an AJAX (fetch) request to update the task status
             fetch(`/${taskId}/status`, {
                 method: "PUT",
@@ -40,7 +39,6 @@ doneButtons.forEach(button => {
 
         // When the button text content is "Undone" and the button is pressed
         else if(button.textContent === "Undone"){
-            console.log("undone")
             // Make an AJAX (fetch) request to update the task status
             fetch(`/${taskId}/status`, {
                 method: "PUT",
@@ -89,8 +87,67 @@ searchForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const searchQuery = searchField.value;
-    window.location.href = `/search?q=${searchQuery}`;
+
+    fetch(`/search?q=${searchQuery}`)
+        .then(response => response.json())
+        .then(data => {
+            // Update the task lists based on search results
+            updateTaskList("upcoming-tasks", data.upcomingTasks);
+            updateTaskList("done-tasks", data.doneTasks);
+        })
+        .catch(error => {
+            console.error("Error fetching search results:", error);
+        });
 });
+
+// Function to update task lists
+function updateTaskList(containerId, tasks) {
+    const taskContainer = document.getElementById(containerId);
+    taskContainer.innerHTML = ""; // Clear the existing tasks
+
+    tasks.forEach(todoValue => {
+        // Create task elements and append them to the container
+        const task = document.createElement("div");
+        task.className = "task";
+
+        const content = document.createElement("div");
+        content.className = "content";
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "text";
+        input.value = todoValue.todo;
+        input.readOnly = true;
+
+        content.appendChild(input);
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const editButton = document.createElement("button");
+        editButton.className = "edit";
+        editButton.setAttribute("data-task-id", todoValue.id);
+        editButton.textContent = "Edit";
+
+        const statusButton = document.createElement("button");
+        statusButton.className = "status";
+        statusButton.setAttribute("data-task-id", todoValue.id);
+        statusButton.textContent = todoValue.status === "Done" ? "Undone" : "Done";
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = `delete ${todoValue.id}`;
+        deleteButton.textContent = "Delete";
+
+        actions.appendChild(editButton);
+        actions.appendChild(statusButton);
+        actions.appendChild(deleteButton);
+
+        task.appendChild(content);
+        task.appendChild(actions);
+
+        taskContainer.appendChild(task);
+    });
+}
 
 // Delete button
 const deleteButton = document.querySelectorAll(".delete")

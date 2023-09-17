@@ -34,40 +34,36 @@
         <section class="task-list">
             <h2 id="upcoming-header">Upcoming</h2>
                 <div id="upcoming-tasks">
-                    <% if(upcomingTasks) { %>
-                        <% upcomingTasks.forEach(todoValue => { %>
-                            <div class="task">
-                                <div class="content">
-                                    <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
-                                </div>
-                                <div class="actions">
-                                    <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
-                                    <button class="status" data-task-id="<%= todoValue.id %>">Done</button>
-                                    <button class="delete <%= todoValue.id %>">Delete</button>
-                                </div>
+                    <% upcomingTasks.forEach(todoValue => { %>
+                        <div class="task">
+                            <div class="content">
+                                <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
                             </div>
-                        <% }) %>
-                    <% } %>
+                            <div class="actions">
+                                <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
+                                <button class="status" data-task-id="<%= todoValue.id %>">Done</button>
+                                <button class="delete <%= todoValue.id %>">Delete</button>
+                            </div>
+                        </div>
+                    <% }) %>
                 </div>
         </section>
 
         <section class="task-list">
             <h2 id="done-header">Done</h2>
                 <div id="done-tasks">
-                    <% if(doneTasks) { %>
-                        <% doneTasks.forEach(todoValue => { %>
-                            <div class="task">
-                                <div class="content">
-                                    <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
-                                </div>
-                                <div class="actions">
-                                    <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
-                                    <button class="status" data-task-id="<%= todoValue.id %>">Undone</button>
-                                    <button class="delete <%= todoValue.id %>">Delete</button>
-                                </div>
+                    <% doneTasks.forEach(todoValue => { %>
+                        <div class="task">
+                            <div class="content">
+                                <input type="text" class="text" value="<%= todoValue.todo %>" readonly/>
                             </div>
-                        <% }) %>
-                    <% } %>
+                            <div class="actions">
+                                <button class="edit" data-task-id="<%= todoValue.id %>">Edit</button>
+                                <button class="status" data-task-id="<%= todoValue.id %>">Undone</button>
+                                <button class="delete <%= todoValue.id %>">Delete</button>
+                            </div>
+                        </div>
+                    <% }) %>
                 </div>
         </section>
     </main>

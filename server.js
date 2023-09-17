@@ -87,13 +87,24 @@ app.get('/search', (req, res) => {
     const searchQuery = req.query.q; // Get the search query from the request
 
     // Use a regular expression to perform a case-insensitive search
-    Todo.find({ todo: { $regex: new RegExp(searchQuery, 'i') } })
-        .then(result => {
-            res.render('index', { data: result });
+    Todo.find({
+        todo: { $regex: new RegExp(searchQuery, 'i') },
+        status: 'Undone' // Filter by status "Undone" (undone)
+    })
+        .then(upcomingTasks => {
+            // Retrieve tasks with status "Done"
+            Todo.find({ status: "Done" })
+                .then(doneTasks => {
+                    res.json({ upcomingTasks, doneTasks });
+                })
+                .catch(error => {
+                    console.error("Error retrieving Done tasks:", error);
+                    res.status(500).json({ message: 'Internal Server Error' });
+                });
         })
         .catch(error => {
-            console.error("Error searching tasks:", error);
-            res.status(500).send("Internal Server Error");
+            console.error("Error retrieving upcoming tasks:", error);
+            res.status(500).json({ message: 'Internal Server Error' });
         });
 });
 
