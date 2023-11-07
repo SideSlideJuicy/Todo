@@ -10,6 +10,10 @@ const todoSchema = new Schema({
         type: String,
         enum: ["Undone", "Done"],
         default: "Undone" // Set the default status to "Undone"
+    },
+    date: {
+        type: Date,
+        required: true
     }
 });
 

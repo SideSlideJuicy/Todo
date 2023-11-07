@@ -1,6 +1,10 @@
 // Status buttons
 const doneButtons = document.querySelectorAll(".status");
 
+// Counters
+const upcomingTaskCounter = document.getElementById("upcoming-task-counter");
+const doneTaskCounter = document.getElementById("done-task-counter");
+
 doneButtons.forEach(button => {
     button.addEventListener("click", () => {
         const taskContainer = button.closest(".task");
@@ -10,6 +14,12 @@ doneButtons.forEach(button => {
 
         // When the button text content is "Done" and the button is pressed
         if (button.textContent === "Done"){
+
+            // Update the Upcoming Task Counter value
+            upcomingTaskCounter.textContent = Number(upcomingTaskCounter.textContent) - 1;
+            // Update the Done Task Counter value
+            doneTaskCounter.textContent = Number(doneTaskCounter.textContent) + 1;
+
             // Make an AJAX (fetch) request to update the task status
             fetch(`/${taskId}/status`, {
                 method: "PUT",
@@ -64,7 +74,6 @@ doneButtons.forEach(button => {
                         section.classList.remove("hidden");
                     }
 
-
                 } else {
                     console.error("Status update failed:", data.message);
                 }
@@ -76,6 +85,12 @@ doneButtons.forEach(button => {
 
         // When the button text content is "Undone" and the button is pressed
         else if(button.textContent === "Undone"){
+
+            // Update the Upcoming Task Counter value
+            upcomingTaskCounter.textContent = Number(upcomingTaskCounter.textContent) + 1;
+            // Update the Done Task Counter value
+            doneTaskCounter.textContent = Number(doneTaskCounter.textContent) - 1;
+
             // Make an AJAX (fetch) request to update the task status
             fetch(`/${taskId}/status`, {
                 method: "PUT",
@@ -258,3 +273,10 @@ function showSection(section) {
     // Remove a class to show the section
     section.classList.remove("hidden");
 }
+
+
+
+
+
+
+

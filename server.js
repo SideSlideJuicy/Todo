@@ -14,42 +14,51 @@ app.use(bodyParser.json());
 const dburl = "mongodb://localhost:27017/tododb";
 mongoose.connect(dburl, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// 
-app.get('/', (req, res) => {
-    // Retrieve tasks with status "Undone"
-    Todo.find({ status: "Undone" })
-        .then(upcomingTasks => {
-            // Retrieve tasks with status "Done"
-            Todo.find({ status: "Done" })
-                .then(doneTasks => {
-                    res.render('index', { upcomingTasks, doneTasks });
-                })
-                .catch(error => {
-                    console.error("Error retrieving Done tasks:", error);
-                    res.status(500).send("Internal Server Error");
-                });
-        })
-        .catch(error => {
-            console.error("Error retrieving Upcoming tasks:", error);
-            res.status(500).send("Internal Server Error");
+// Function to fetch and render the task list view
+async function renderTaskListView(res) {
+    try {
+        const undoneTasksCount = await Todo.countDocuments({ status: "Undone" });
+        const doneTasksCount = await Todo.countDocuments({ status: "Done" });
+        const upcomingTasks = await Todo.find({ status: "Undone" });
+        const doneTasks = await Todo.find({ status: "Done" });
+
+        res.render('index', {
+            undoneTasksCount,
+            doneTasksCount,
+            upcomingTasks,
+            doneTasks
         });
+    } catch (error) {
+        console.error("Error retrieving tasks:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// Render list view
+app.get('/', async (req, res) => {
+    await renderTaskListView(res);
 });
 
 // Add task
 app.post("/", (req, res) => {
+    const { taskValue, dateValue } = req.body;
+
     const todo = new Todo({
-        todo: req.body.taskValue
+        todo: taskValue,
+        date: dateValue ? new Date(dateValue) : new Date(), // Use the provided date or set the current date
+        // If 'status' is not explicitly set here, it will default to "Undone" based on the schema.
     });
 
     todo.save()
-    .then(result => {
-        res.redirect("/");
-    })
-    .catch(error => {
-        console.error("Error adding task:", error);
-        res.status(500).send("Internal Server Error");
-    });
+        .then(result => {
+            res.redirect("/");
+        })
+        .catch(error => {
+            console.error("Error adding task:", error);
+            res.status(500).send("Internal Server Error");
+        });
 });
+
 
 // Delete task
 app.delete("/:id", (req, res) => {
@@ -103,8 +112,8 @@ app.get('/search', async (req, res) => {
     }
 });
 
-// 
-app.put('/:id/status', (req, res) => {
+// Done task
+app.put('/:id/status', async (req, res) => {
     const taskId = req.params.id;
     const newStatus = req.body.status;
 
@@ -116,10 +125,6 @@ app.put('/:id/status', (req, res) => {
             } else {
                 res.status(404).json({ message: 'Task not found' });
             }
-        })
-        .catch(error => {
-            console.error("Error updating task status:", error);
-            res.status(500).json({ message: 'An error occurred' });
         });
 });
 
